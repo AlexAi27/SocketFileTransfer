@@ -116,7 +116,7 @@ SOCKET ListenSocketHelper::listenTo(QString &name, int &err) {
         free(recvbuf);
         throw "receive failed!";
     } else {
-        qDebug() << "xxx";
+        // qDebug() << "xxx";
         closesocket(ClientSocket);
         err = -1;
         ClientSocket = INVALID_SOCKET;
@@ -127,14 +127,14 @@ SOCKET ListenSocketHelper::listenTo(QString &name, int &err) {
 }
 
 int ListenSocketHelper::recvFile(SOCKET ClientSocket, QString path, int &err) {
-    qDebug() << path;
+    // qDebug() << path;
     FILE *file = fopen(path.toLocal8Bit().data(), "wb");
     int iResult, iSendResult;
     char *recvbuf = (char *) malloc(sizeof(char) * ListenSocketHelper::DEFAULT_BUFLEN);
 
     while (true) {
         iResult = recv(ClientSocket, recvbuf, ListenSocketHelper::DEFAULT_BUFLEN, 0);
-        qDebug() << iResult;
+        // qDebug() << iResult;
         if (iResult > 0) {
             fwrite(recvbuf, sizeof(char), iResult, file);
 

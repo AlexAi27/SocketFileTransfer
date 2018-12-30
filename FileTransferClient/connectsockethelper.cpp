@@ -90,7 +90,7 @@ void ConnectSocketHelper::closeSocket() {
 }
 
 int ConnectSocketHelper::transferFile(QString path) {
-    qDebug() << path;
+    // qDebug() << path;
     FILE *file = fopen(path.toLocal8Bit().data(), "rb");
     int iResult;
     char *recvbuf = (char *) malloc(sizeof(char) * ConnectSocketHelper::DEFAULT_BUFLEN);
@@ -100,12 +100,12 @@ int ConnectSocketHelper::transferFile(QString path) {
     fseek(file, 0L, FILE_END);
     size = ftell(file);
     rewind(file);
-    qDebug() << size;
+    // qDebug() << size;
     char *tmp = (char *) malloc(sizeof(char) * 4096);
 
     strcpy(tmp, path.toUtf8().data());
     strcpy(sendbuf, strrchr(tmp, '/')+1);
-    qDebug() << sendbuf;
+    // qDebug() << sendbuf;
     iResult = send(ConnectSocketHelper::ConnectSocket, sendbuf, strlen(sendbuf), 0);
     if (iResult == SOCKET_ERROR) {
         QString err = "Sending failed with error code : ";

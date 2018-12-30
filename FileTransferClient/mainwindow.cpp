@@ -25,7 +25,7 @@ void MainWindow::init() {
 void MainWindow::on_selectFileButton_clicked()
 {
     QString fileName = QFileDialog::getOpenFileName(this, tr("Select File"),"./");
-    qDebug() << fileName;
+    // qDebug() << fileName;
     ui->filePathLineEdit->setText(fileName);
 }
 
