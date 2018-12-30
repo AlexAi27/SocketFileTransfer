@@ -83,7 +83,7 @@ void ListenSocketHelper::closeSocket() {
     WSACleanup();
 }
 
-SOCKET ListenSocketHelper::listenTo(QString &name, int &err) {
+SOCKET ListenSocketHelper::listenTo(int &err) {
     SOCKET ClientSocket = INVALID_SOCKET;
     ClientSocket = accept(ListenSocketHelper::ListenSocket, NULL, NULL);
     if (ClientSocket == INVALID_SOCKET) {
@@ -93,12 +93,18 @@ SOCKET ListenSocketHelper::listenTo(QString &name, int &err) {
         throw "accept failed!";
     }
 
-    char *recvbuf = (char *) malloc(sizeof(char) * ListenSocketHelper::DEFAULT_BUFLEN);
+    return ClientSocket;
+}
 
-    int iResult = recv(ClientSocket, recvbuf, ListenSocketHelper::DEFAULT_BUFLEN, 0), iSendResult;
+int ListenSocketHelper::recvFile(SOCKET ClientSocket, int &err) {
+    int iResult, iSendResult;
+    char *recvbuf = (char *) malloc(sizeof(char) * ListenSocketHelper::DEFAULT_BUFLEN);
+    QString filename;
+
+    iResult = recv(ClientSocket, recvbuf, ListenSocketHelper::DEFAULT_BUFLEN, 0), iSendResult;
     if (iResult > 0) {
         recvbuf[iResult] = '\0';
-        name = recvbuf;
+        filename = recvbuf;
 
         // Echo the buffer back to the sender
         iSendResult = send( ClientSocket, "1", 1, 0 );
@@ -116,25 +122,20 @@ SOCKET ListenSocketHelper::listenTo(QString &name, int &err) {
         free(recvbuf);
         throw "receive failed!";
     } else {
-        // qDebug() << "xxx";
+        qDebug() << "xxx";
         closesocket(ClientSocket);
         err = -1;
         ClientSocket = INVALID_SOCKET;
+        throw "Connection closed";
     }
-
-    free(recvbuf);
-    return ClientSocket;
-}
-
-int ListenSocketHelper::recvFile(SOCKET ClientSocket, QString path, int &err) {
-    // qDebug() << path;
+    QString path = ListenSocketHelper::path + "/" + filename;
+    qDebug() << path;
     FILE *file = fopen(path.toLocal8Bit().data(), "wb");
-    int iResult, iSendResult;
-    char *recvbuf = (char *) malloc(sizeof(char) * ListenSocketHelper::DEFAULT_BUFLEN);
+
 
     while (true) {
         iResult = recv(ClientSocket, recvbuf, ListenSocketHelper::DEFAULT_BUFLEN, 0);
-        // qDebug() << iResult;
+        qDebug() << iResult;
         if (iResult > 0) {
             fwrite(recvbuf, sizeof(char), iResult, file);
 

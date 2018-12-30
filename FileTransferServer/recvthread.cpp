@@ -1,15 +1,14 @@
 #include "recvthread.h"
 
-RecvThread::RecvThread(SOCKET clientSocket, QString filename)
+RecvThread::RecvThread(SOCKET clientSocket)
 {
     ClientSocket = clientSocket;
-    fileName = filename;
 }
 
 void RecvThread::run() {
     int err;
     try{
-        ListenSocketHelper::recvFile(ClientSocket, fileName, err);
+        ListenSocketHelper::recvFile(ClientSocket, err);
     } catch (const char *msg) {
 
     }

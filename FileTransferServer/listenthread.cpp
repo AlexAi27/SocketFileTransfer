@@ -12,9 +12,9 @@ void ListenThread::run() {
     QString name;
     while (true) {
         try {
-            SOCKET clientSocket = ListenSocketHelper::listenTo(name, err);
+            SOCKET clientSocket = ListenSocketHelper::listenTo(err);
             if (clientSocket == INVALID_SOCKET) continue;
-            RecvThread *recvThread = new RecvThread(clientSocket, ListenSocketHelper::path + "\\" + name);
+            RecvThread *recvThread = new RecvThread(clientSocket);
             recvThread->start();
         } catch (const char *msg) {
             QMessageBox::warning(NULL, "Error", msg, QMessageBox::Ok);

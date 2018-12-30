@@ -26,8 +26,8 @@ public:
     ~ListenSocketHelper();
     void setBuflen(int buflen);
     int initSocket(int &err);
-    static SOCKET listenTo(QString &name, int &err);
-    static int recvFile(SOCKET ClientSocket, QString path, int &err);
+    static SOCKET listenTo(int &err);
+    static int recvFile(SOCKET ClientSocket, int &err);
     void closeSocket();
 
     static SOCKET ListenSocket;

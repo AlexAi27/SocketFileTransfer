@@ -7,12 +7,11 @@
 class RecvThread : public QThread
 {
 public:
-    RecvThread(SOCKET clientSocket, QString filename);
+    RecvThread(SOCKET clientSocket);
     void run();
 
 private:
     SOCKET ClientSocket;
-    QString fileName;
 };
 
 #endif // RECVTHREAD_H
